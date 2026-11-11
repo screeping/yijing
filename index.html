@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>观易 · 我的易经学习手记</title>
+<style>
+  :root {
+    --bg: #e3af24;
+    --bg-deep: #cf9a17;
+    --surface: #f8e8b0;
+    --surface-2: #f1dc8e;
+    --ink: #3a2c0e;
+    --ink-soft: #5c4614;
+    --ink-faint: #8a6d1f;
+    --line: rgba(58, 44, 14, 0.25);
+    --font: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: rgba(58, 44, 14, 0.25); }
+
+  .tangjin {
+    background: linear-gradient(180deg, #fdf3c0 0%, #f0d367 30%, #c8961a 55%, #e8c44e 80%, #b8860b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #c8961a;
+    -webkit-text-stroke: 0.6px rgba(90, 60, 0, 0.5);
+  }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(227, 175, 36, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .brand {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+  .brand small { letter-spacing: 1px; color: var(--ink-faint); font-size: 12px; margin-left: 8px; font-weight: 400; }
+  nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 26px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    transition: color .2s;
+  }
+  nav a:hover { color: var(--ink); }
+
+  .hero { text-align: center; padding: 70px 0 60px; }
+  .taiji { display: inline-block; width: 250px; height: 250px; }
+  .taiji svg { width: 100%; height: 100%; }
+  .hero h1 {
+    font-size: 50px;
+    font-weight: 700;
+    letter-spacing: 16px;
+    margin: 28px 0 16px;
+  }
+  .hero .slogan { font-size: 17px; color: var(--ink); letter-spacing: 3px; font-weight: 700; }
+  .hero .sub { margin-top: 14px; font-size: 14px; color: var(--ink-soft); letter-spacing: 1px; }
+  .divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(var(--ink-faint), transparent);
+    margin: 42px auto 0;
+  }
+
+  section { padding: 66px 0; }
+  .sec-head { margin-bottom: 38px; }
+  .sec-head .num { font-size: 13px; color: var(--ink-soft); letter-spacing: 3px; font-weight: 700; }
+  .sec-head h2 { font-size: 28px; font-weight: 700; letter-spacing: 6px; margin-top: 6px; }
+  .sec-head .lead { color: var(--ink-soft); font-size: 14px; margin-top: 10px; max-width: 640px; }
+
+  .bagua-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .bagua {
+    background: var(--surface);
+    border: 1px solid rgba(58, 44, 14, 0.18);
+    border-radius: 12px;
+    padding: 26px 18px;
+    text-align: center;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .bagua:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(58,44,14,.18); }
+  .bagua .sym { font-size: 40px; color: var(--ink); line-height: 1; }
+  .bagua .name { font-size: 20px; font-weight: 700; letter-spacing: 2px; margin-top: 14px; color: var(--ink); }
+  .bagua .nature { font-size: 13px; color: var(--bg-deep); margin-top: 4px; letter-spacing: 2px; font-weight: 700; }
+  .bagua .attr { font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+
+  .gua-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .gua {
+    background: var(--surface);
+    border: 1px solid rgba(58, 44, 14, 0.18);
+    border-radius: 12px;
+    padding: 22px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .gua .sym { font-size: 26px; color: var(--ink); line-height: 1.3; white-space: nowrap; }
+  .gua .no { font-size: 11px; color: var(--ink-faint); letter-spacing: 1px; }
+  .gua .name { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: 1px; }
+  .gua .desc { font-size: 12px; color: var(--ink-soft); margin-top: 4px; line-height: 1.7; }
+  .hint { font-size: 13px; color: var(--ink-soft); margin-top: 22px; letter-spacing: 1px; }
+
+  .notes { display: grid; gap: 18px; }
+  .note {
+    background: var(--surface);
+    border: 1px solid rgba(58, 44, 14, 0.18);
+    border-radius: 14px;
+    padding: 28px 30px;
+    transition: box-shadow .2s;
+  }
+  .note:hover { box-shadow: 0 6px 18px rgba(58,44,14,.15); }
+  .note .meta { font-size: 12px; color: var(--ink-faint); letter-spacing: 2px; }
+  .note h3 { font-size: 20px; font-weight: 700; letter-spacing: 2px; margin-top: 8px; }
+  .note p { font-size: 14px; color: var(--ink-soft); margin-top: 12px; }
+
+  .about { max-width: 680px; }
+  .about p { font-size: 15px; color: var(--ink-soft); margin-bottom: 18px; }
+  .about .quote {
+    border-left: 2px solid var(--ink-faint);
+    padding: 6px 0 6px 20px;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 28px 0;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 44px 0;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+  footer .tri { color: var(--ink-faint); margin-bottom: 10px; }
+
+  @media (max-width: 760px) {
+    .bagua-grid { grid-template-columns: repeat(2, 1fr); }
+    .gua-list { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 34px; letter-spacing: 10px; }
+    .taiji { width: 200px; height: 200px; }
+    nav a { margin-left: 14px; font-size: 13px; }
+    .brand small { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand tangjin">观易<small>学易手记</small></div>
+    <nav>
+      <a href="#bagua">八卦</a>
+      <a href="#liushisi">六十四卦</a>
+      <a href="#notes">笔记</a>
+      <a href="#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero wrap">
+  <div class="taiji">
+    <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="太极八卦图">
+      <circle cx="160" cy="160" r="150" fill="none" stroke="#3a2c0e" stroke-width="2.5"/>
+      <circle cx="160" cy="160" r="104" fill="#f8e8b0" stroke="#3a2c0e" stroke-width="2.5"/>
+      <path d="M160 56 A104 104 0 0 1 160 264 A52 52 0 0 1 160 160 A52 52 0 0 0 160 56 Z" fill="#3a2c0e"/>
+      <circle cx="160" cy="108" r="19" fill="#f8e8b0"/>
+      <circle cx="160" cy="212" r="19" fill="#3a2c0e"/>
+      <g fill="#3a2c0e" font-size="34" text-anchor="middle" dominant-baseline="central" font-family="serif">
+        <text x="160" y="36">☰</text>
+        <text x="259" y="61">☴</text>
+        <text x="284" y="160">☵</text>
+        <text x="259" y="259">☶</text>
+        <text x="160" y="284">☷</text>
+        <text x="61" y="259">☳</text>
+        <text x="36" y="160">☲</text>
+        <text x="61" y="61">☱</text>
+      </g>
+    </svg>
+  </div>
+  <h1 class="tangjin">观 易</h1>
+  <div class="slogan">观象玩辞，学易手记</div>
+  <div class="sub">记录我学习《易经》的点滴心得 · 与同好共参</div>
+  <div class="divider"></div>
+</div>
+
+<section id="bagua">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">壹 · 八卦基础</div>
+      <h2 class="tangjin">阴阳与八卦</h2>
+      <p class="lead">《易》以阴阳立论，一阴一阳之谓道。阳爻为「—」，阴爻为「- -」，三爻相叠而成八卦，分别象征天地间八种基本物象。</p>
+    </div>
+    <div class="bagua-grid">
+      <div class="bagua"><div class="sym">☰</div><div class="name">乾</div><div class="nature">天</div><div class="attr">健 · 父 · 刚</div></div>
+      <div class="bagua"><div class="sym">☷</div><div class="name">坤</div><div class="nature">地</div><div class="attr">顺 · 母 · 柔</div></div>
+      <div class="bagua"><div class="sym">☳</div><div class="name">震</div><div class="nature">雷</div><div class="attr">动 · 长男</div></div>
+      <div class="bagua"><div class="sym">☴</div><div class="name">巽</div><div class="nature">风</div><div class="attr">入 · 长女</div></div>
+      <div class="bagua"><div class="sym">☵</div><div class="name">坎</div><div class="nature">水</div><div class="attr">陷 · 中男</div></div>
+      <div class="bagua"><div class="sym">☲</div><div class="name">离</div><div class="nature">火</div><div class="attr">丽 · 中女</div></div>
+      <div class="bagua"><div class="sym">☶</div><div class="name">艮</div><div class="nature">山</div><div class="attr">止 · 少男</div></div>
+      <div class="bagua"><div class="sym">☱</div><div class="name">兑</div><div class="nature">泽</div><div class="attr">悦 · 少女</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="liushisi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">贰 · 六十四卦</div>
+      <h2 class="tangjin">卦辞与爻辞</h2>
+      <p class="lead">八卦两两相重，则成八八六十四卦，每卦六爻，共三百八十四爻，配以卦辞、爻辞，用以推演人事吉凶进退。</p>
+    </div>
+    <div class="gua-list">
+      <div class="gua">
+        <div class="sym">☰☰</div>
+        <div><div class="no">第 1 卦</div><div class="name">乾为天</div><div class="desc">「元亨利贞」，天道刚健，自强不息。</div></div>
+      </div>
+      <div class="gua">
+        <div class="sym">☷☷</div>
+        <div><div class="no">第 2 卦</div><div class="name">坤为地</div><div class="desc">「元亨，利牝马之贞」，厚德载物。</div></div>
+      </div>
+      <div class="gua">
+        <div class="sym">☵☳</div>
+        <div><div class="no">第 3 卦</div><div class="name">水雷屯</div><div class="desc">「元亨利贞，勿用有攸往」，万物始生之难。</div></div>
+      </div>
+      <div class="gua">
+        <div class="sym">☶☵</div>
+        <div><div class="no">第 4 卦</div><div class="name">山水蒙</div><div class="desc">「亨」，蒙昧待启，学以养正。</div></div>
+      </div>
+      <div class="gua">
+        <div class="sym">☵☰</div>
+        <div><div class="no">第 5 卦</div><div class="name">水天需</div><div class="desc">「有孚，光亨」，云上于天，待时而动。</div></div>
+      </div>
+      <div class="gua">
+        <div class="sym">☰☵</div>
+        <div><div class="no">第 6 卦</div><div class="name">天水讼</div><div class="desc">「有孚窒惕」，上刚下险，慎争止讼。</div></div>
+      </div>
+    </div>
+    <div class="hint">以上为六十四卦前六卦示例，后续随学习进度逐步整理补充。</div>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">叁 · 学习笔记</div>
+      <h2 class="tangjin">心得与感悟</h2>
+      <p class="lead">学易路上的零星所得，随手记下，日积月累，慢慢参透。</p>
+    </div>
+    <div class="notes">
+      <div class="note">
+        <div class="meta">2026-11-11 · 入门</div>
+        <h3 class="tangjin">学易，先学一个「变」字</h3>
+        <p>《易》的本义就是「变易」。初学最大的误区，是把卦辞当作僵死的答案去套。其实每一卦、每一爻都在讲「处在这样的位置、这样的时势，该如何进退」。读易，读的是变化的道理，而不是占卜的结论。</p>
+      </div>
+      <div class="note">
+        <div class="meta">2026-11-08 · 卦象</div>
+        <h3 class="tangjin">乾卦三连，坤卦六断</h3>
+        <p>背八卦有个口诀：「乾三连、坤六断、震仰盂、艮覆碗、离中虚、坎中满、兑上缺、巽下断」。配合「乾为天、坤为地」的自然象征，八卦的形象一下就活了，比死记硬背记得牢。</p>
+      </div>
+      <div class="note">
+        <div class="meta">2026-11-05 · 感悟</div>
+        <h3 class="tangjin">为什么说「善易者不卜」</h3>
+        <p>荀子这句话点醒了我：真正懂易的人，不必靠占卜。因为明白了阴阳消长、物极必反的道理，自然知道什么时候该进、什么时候该退、什么时候该等。易教人的是智慧，不是侥幸。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="sec-head">
+      <div class="num">肆 · 关于本站</div>
+      <h2 class="tangjin">我与易经</h2>
+    </div>
+    <p>最近开始学《易经》，越读越觉得，这部六千年前的书，讲的其实是中国人最朴素的处世哲学——如何在不确定中安身立命。</p>
+    <p>这里是我学习过程中的一点记录：八卦的基础、卦辞的整理，还有自己的一点心得体会。写下来，既是备忘，也想和同样对《易》感兴趣的朋友一起交流。</p>
+    <div class="quote">「居则观其象而玩其辞，动则观其变而玩其占。」<br>—— 《系辞传》</div>
+    <p>内容尚在积累，欢迎常来看看。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="tri">☰ ☷</div>
+  <div class="tangjin">观易 · 学易手记</div>
+  <div style="margin-top:6px;">观象玩辞，与时偕行</div>
+</footer>
+
+</body>
+</html>
